@@ -6,4 +6,4 @@ export default {
     coverage: { reporter: ['text', 'html'] },
     setupFiles: ['./test/setup.js']
   }
-};
+}
