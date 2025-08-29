@@ -74,8 +74,6 @@ A minimal backend service that generates multiple-choice quizzes from any topic 
     npm run lint         # lint
     npm run lint:fix     # lint with --fix
 
-(If you added nodemon or a debug config, document them here.)
-
 ---
 
 ## 📡 API
