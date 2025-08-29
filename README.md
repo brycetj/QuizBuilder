@@ -120,7 +120,7 @@ Environment variables (backend/.env):
 
 Security notes:
 - Never expose OPENAI_API_KEY to the browser; calls happen server-side.
-- .env is gitignored; commit .env.example instead.
+- .env is gitignored;
 
 ---
 
@@ -152,29 +152,6 @@ What’s covered:
 ## 🧹 Linting & Hooks (optional but recommended)
 - ESLint configured with import order + Prettier compatibility
 - Pre-commit hooks via Husky + lint-staged (if initialized)
-
-CI example (GitHub Actions, repo root .github/workflows/ci.yml):
-    name: CI
-    on: [push, pull_request]
-    jobs:
-      backend-ci:
-        runs-on: ubuntu-latest
-        defaults:
-          run:
-            working-directory: backend
-        steps:
-          - uses: actions/checkout@v4
-          - uses: actions/setup-node@v4
-            with:
-              node-version: 20
-              cache: 'npm'
-              cache-dependency-path: backend/package-lock.json
-          - run: npm ci
-          - run: npm run lint
-          - run: npm test
-            env:
-              USE_MOCK: "true"
-              NODE_ENV: "test"
 
 ---
 
