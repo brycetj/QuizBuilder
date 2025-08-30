@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-export default function TopicForm({ onGenerate }) {
-  const [topic, setTopic] = useState("");
+export default function TopicForm({ topic, setTopic, onGenerate }) {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
@@ -27,7 +26,7 @@ export default function TopicForm({ onGenerate }) {
             id="topic"
             className="form-control"
             placeholder="e.g., Photosynthesis, Ancient Rome, Neural Networks"
-            value={topic}
+            value={topic} // ← controlled by App
             onChange={(e) => setTopic(e.target.value)}
           />
         </div>

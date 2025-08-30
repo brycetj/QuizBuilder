@@ -6,17 +6,25 @@ import EmptyState from "./components/EmptyState";
 import { generateQuiz } from "./api";
 
 export default function App() {
+  const [topic, setTopic] = useState("");
   const [quiz, setQuiz] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(null);
 
-  async function handleGenerate(topic) {
+  async function handleGenerate(requestedTopic) {
+    const t = (requestedTopic ?? topic).trim();
+    if (!t) {
+      setError("Please enter a topic.");
+      return;
+    }
+
     setError(null);
     setSubmitted(false);
     setQuiz(null);
     setAnswers([]);
-    const data = await generateQuiz(topic);
+
+    const data = await generateQuiz(t);
     setQuiz(data);
     setAnswers(new Array(5).fill(-1));
   }
@@ -24,10 +32,12 @@ export default function App() {
   function handleSubmit() {
     setSubmitted(true);
   }
+
   function handleNewQuiz() {
     setSubmitted(false);
     setQuiz(null);
     setAnswers([]);
+    setTopic("");
   }
 
   return (
@@ -39,7 +49,11 @@ export default function App() {
         </p>
       </header>
 
-      <TopicForm onGenerate={handleGenerate} />
+      <TopicForm
+        topic={topic}
+        setTopic={setTopic}
+        onGenerate={handleGenerate}
+      />
       <ErrorAlert message={error} />
 
       {quiz ? (
