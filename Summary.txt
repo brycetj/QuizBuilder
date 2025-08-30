@@ -1,0 +1,14 @@
+For this project I implemented an Express backend paired with a React frontend. 
+On the backend, I separated the server into clear functional layers: server.js boots the app, 
+app.js configures middleware and Swagger documentation, routes/ define the endpoints, and 
+controllers/ contain the logic behind those endpoints. I also introduced a lib/ directory to 
+isolate integrations such as the OpenAI client. This separation improves readability, testability, 
+and makes future scaling (e.g., persistence or authentication) straightforward. On the frontend, 
+I organized the UI into reusable components (TopicForm, QuizView, QuestionCard, etc.), 
+keeping concerns well-separated and making the codebase easy to extend and maintain.
+
+For the AI layer, I selected OpenAI’s gpt-4o-mini model. I chose it because of my prior experience with OpenAI’s 
+ecosystem and because this model balances speed, accuracy, and cost effectively. It provides structured JSON reliably, 
+which is important for generating quizzes in a predictable format. Additionally, I included a mock mode to ensure the 
+app can run and be tested without incurring costs or requiring API availability, which supports both developer experience 
+and cost control.
