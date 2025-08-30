@@ -1,168 +1,151 @@
-# 🧠 AI Quiz Builder (Backend)
+# 🧠 AI Quiz Builder (Full Stack)
 
-A minimal backend service that generates multiple-choice quizzes from any topic using an LLM. Includes mock mode for offline/testing and Swagger docs for a clean demo.
+A full-stack project that generates multiple-choice quizzes from any topic using an LLM.  
+Includes an **Express backend** with Swagger docs and a **React + Bootstrap frontend**.  
+Mock mode is available for offline/testing without API calls.
 
 ---
 
 ## ✨ Features
-- Generate 5 MCQs per topic (4 options, 1 correct) with explanations
-- Optional Wikipedia retrieval for grounding
-- Mock mode (no API calls) via USE_MOCK=true
-- Swagger UI at /docs and OpenAPI JSON at /docs.json
-- Modular code: routes, controllers, services, docs split by feature
-- Tests (Vitest + Supertest) and linting (ESLint), optional Git hooks and CI
+- Generate 5 MCQs per topic (4 options, 1 correct) with explanations  
+- Backend: Express + Swagger UI/OpenAPI docs  
+- Frontend: React (CRA) + Bootstrap, separated into reusable components  
+- Modular backend: routes, controllers, services split by feature  
+- Mock mode (no API calls) via `USE_MOCK=true`  
+- Tests: Vitest + Supertest (backend), Jest + React Testing Library (frontend)  
+- ESLint/Prettier + optional Husky hooks for code quality  
 
 ---
 
 ## 🗂 Project Structure
-    backend/
-      ├─ src/
-      │  ├─ server.js            # starts HTTP server
-      │  ├─ app.js               # builds Express app, middleware, docs
-      │  └─ routes/
-      │     ├─ index.js          # mounts feature routers under /api
-      │     ├─ health.routes.js  # GET /api/health
-      │     └─ quiz.routes.js    # POST /api/generate-quiz
-      ├─ controllers/
-      │  └─ quiz.controller.js
-      ├─ lib/
-      │  ├─ env.js               # env loading + validation
-      │  ├─ llm.js               # OpenAI wrapper + mock mode
-      │  └─ retrieval.js         # Wikipedia summary
-      ├─ docs/
-      │  ├─ base.js
-      │  ├─ index.js             # composes feature docs
-      │  └─ features/
-      │     ├─ health.js
-      │     └─ quiz.js
-      ├─ test/
-      │  ├─ api.test.js
-      │  ├─ llm-shape.test.js
-      │  └─ setup.js             # sets USE_MOCK=true for tests
-      ├─ .eslintrc.json
-      ├─ vitest.config.mjs
-      ├─ package.json
-      └─ .env.example
+backend/
+  src/
+    server.js           # starts HTTP server
+    app.js              # middleware + Swagger setup
+    routes/             # endpoints
+    controllers/        # request logic
+  lib/                  # OpenAI integration + env helpers
+  docs/                 # Swagger definitions
+  test/                 # Vitest + Supertest
+  .env.example
+  package.json
+
+frontend/
+  src/
+    api/                # API wrapper for fetch
+    components/         # TopicForm, QuizView, QuestionCard, etc.
+    App.jsx             # main React app
+    index.js
+  package.json
 
 ---
 
 ## 🚀 Quickstart
-1) Install
-    npm install
 
-2) Configure environment (create backend/.env)
-    PORT=3000
-    OPENAI_API_KEY=sk-your-key-here
-    USE_MOCK=true
+### Backend
+cd backend
+npm install
 
-   Notes:
-   - USE_MOCK=true returns a static quiz (no external calls).
-   - For real generation set USE_MOCK=false and provide a valid OPENAI_API_KEY.
+Create `.env` in `backend/`:
+PORT=3000
+OPENAI_API_KEY=sk-your-key-here
+USE_MOCK=true
 
-3) Run
-    npm run dev
-   App:  http://localhost:3000
-   Docs: http://localhost:3000/docs
+Run backend:
+npm run dev
 
----
+- API: http://localhost:3000/api  
+- Swagger: http://localhost:3000/docs  
 
-## 🔧 Scripts
-    npm run dev          # start server (with source maps)
-    npm start            # start server (prod-like)
-    npm test             # run tests once (Vitest)
-    npm run test:watch   # run tests in watch mode
-    npm run lint         # lint
-    npm run lint:fix     # lint with --fix
+### Frontend
+cd ../frontend
+npm install
+
+Run frontend:
+npm start
+
+- App: http://localhost:3000 (CRA dev server proxies `/api` to backend)
 
 ---
 
 ## 📡 API
 
-### GET /api/health
-Response 200:
-    { "ok": true }
+### `GET /api/health`
+Response:
+{ "ok": true }
 
-### POST /api/generate-quiz
+### `POST /api/generate-quiz`
 Request:
-    {
-      "topic": "Ancient Rome",
-      "useRetrieval": true
-    }
+{ "topic": "Ancient Rome" }
 
-Response 200:
+Response:
+{
+  "topic": "Ancient Rome",
+  "questions": [
     {
-      "topic": "Ancient Rome",
-      "questions": [
-        {
-          "prompt": "Who was the first emperor of Rome?",
-          "options": ["Julius Caesar","Augustus","Nero","Trajan"],
-          "correctIndex": 1,
-          "explanation": "Augustus (Octavian) became the first Roman emperor."
-        }
-        // four more...
-      ]
+      "prompt": "Who was the first emperor of Rome?",
+      "options": ["Julius Caesar","Augustus","Nero","Trajan"],
+      "correctIndex": 1,
+      "explanation": "Augustus (Octavian) became the first Roman emperor."
     }
+    // four more...
+  ]
+}
 
 Errors:
-- 400: invalid input (e.g., missing topic)
-- 502: LLM returned invalid payload
-- 500: server error
-
-Interactive docs: open /docs and click “Try it out”.
+- 400 → invalid input (missing/invalid topic)  
+- 502 → LLM returned invalid payload  
+- 500 → server error  
 
 ---
 
 ## ⚙️ Configuration
-Environment variables (backend/.env):
-- PORT: server port (default 3000)
-- OPENAI_API_KEY: API key for OpenAI (required in real mode)
-- USE_MOCK: "true" | "false" (true skips external calls and returns a canned quiz)
+- PORT: backend port (default 3000)  
+- OPENAI_API_KEY: required if USE_MOCK=false  
+- USE_MOCK: "true" to bypass OpenAI and return canned quiz data  
 
-Security notes:
-- Never expose OPENAI_API_KEY to the browser; calls happen server-side.
+Security notes:  
+- Never expose OPENAI_API_KEY in the frontend  
 - .env is gitignored;
 
 ---
 
-## 🧠 LLM + Retrieval
-- LLM model (default): gpt-4o-mini (low cost, quick, accurate)
-- Retrieval (optional): Wikipedia REST summary for the given topic; safe to disable
-
-Cost control:
-- USE_MOCK=true during development and tests
-- Cache or rate-limit in production
-- Keep prompts concise and temperature low
+## 🧠 LLM
+- Model: OpenAI gpt-4o-mini (fast, accurate, cost-efficient)  
+- Wikipedia retrieval is used by default for factual grounding  
+- Mock mode prevents billing during tests or demos  
 
 ---
 
 ## 🧪 Tests
-- Framework: Vitest
-- HTTP: Supertest
-- Strategy: In tests we set USE_MOCK=true (via test/setup.js), so no network calls
 
-Run:
-    npm test
-    npm run test:watch
+### Backend
+- Framework: Vitest + Supertest  
+- Covers route validation and schema correctness  
+cd backend
+npm test
 
-What’s covered:
-- Route 200s/400s and schema sanity (5 questions, 4 options, 0–3 correctIndex)
+### Frontend
+- Framework: Jest + React Testing Library  
+- Covers user flows: generate quiz, answer questions, submit, error handling  
+cd frontend
+npm test
 
 ---
 
-## 🧹 Linting & Hooks (optional but recommended)
-- ESLint configured with import order + Prettier compatibility
-- Pre-commit hooks via Husky + lint-staged (if initialized)
+## 🧹 Linting & Hooks
+- ESLint + Prettier configured  
+- Husky + lint-staged optional pre-commit hooks  
 
 ---
 
 ## 🧭 Troubleshooting
-- “Cannot use import outside a module”: ensure "type": "module" in package.json
-- 401/insufficient_quota from OpenAI: add billing or use USE_MOCK=true
-- Tests timing out: ensure tests set USE_MOCK=true and import app after setting env
-- 429 rate limiting in dev: lower rate limit or disable in test mode
-- JSON body not parsed: app.use(express.json()) must be before routes
+- “Cannot use import outside a module”: check "type": "module" in package.json  
+- 401/429 errors: check API key and quota, or use USE_MOCK=true  
+- Tests timing out: ensure mock mode is active in test setup  
+- CRA proxy issues: restart dev server after editing package.json  
 
 ---
 
 ## 👤 Author
-Bryce Jacobson • Software Engineer  
+Bryce Jacobson • Software Engineer
