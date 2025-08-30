@@ -1,14 +1,14 @@
 # 🧠 AI Quiz Builder (Full Stack)
 
 A full-stack project that generates multiple-choice quizzes from any topic using an LLM.  
-Includes an **Express backend** with Swagger docs and a **React + Bootstrap frontend**.  
+Includes an **Node.js + Express backend** with Swagger docs and a **React + Bootstrap frontend**.  
 Mock mode is available for offline/testing without API calls.
 
 ---
 
 ## ✨ Features
 - Generate 5 MCQs per topic (4 options, 1 correct) with explanations  
-- Backend: Express + Swagger UI/OpenAPI docs  
+- Backend: Node.js + Express + Swagger UI/OpenAPI docs  
 - Frontend: React (CRA) + Bootstrap, separated into reusable components  
 - Modular backend: routes, controllers, services split by feature  
 - Mock mode (no API calls) via `USE_MOCK=true`  
@@ -58,13 +58,16 @@ npm run dev
 - Swagger: http://localhost:3000/docs  
 
 ### Frontend
-cd ../frontend
+cd frontend
 npm install
+
+Create `.env` in `frontend/`:
+REACT_APP_API_BASE=http://localhost:3001
 
 Run frontend:
 npm start
 
-- App: http://localhost:3000 (CRA dev server proxies `/api` to backend)
+- App: http://localhost:3001
 
 ---
 
