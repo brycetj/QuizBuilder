@@ -24,9 +24,13 @@ export default function App() {
     setQuiz(null);
     setAnswers([]);
 
-    const data = await generateQuiz(t);
-    setQuiz(data);
-    setAnswers(new Array(5).fill(-1));
+    try {
+      const data = await generateQuiz(t);
+      setQuiz(data);
+      setAnswers(new Array(5).fill(-1));
+    } catch (e) {
+      setError(e?.message || "Request failed");
+    }
   }
 
   function handleSubmit() {
