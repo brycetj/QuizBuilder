@@ -62,7 +62,8 @@ cd frontend
 npm install
 
 Create `.env` in `frontend/`:
-REACT_APP_API_BASE=http://localhost:3001
+PORT=3001
+REACT_APP_API_BASE=http://localhost:3000
 
 Run frontend:
 npm start
