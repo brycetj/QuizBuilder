@@ -1,4 +1,4 @@
-For this project I implemented an Express backend paired with a React frontend. 
+For this project I implemented a Node.js + Express backend paired with a React frontend. 
 On the backend, I separated the server into clear functional layers: server.js boots the app, 
 app.js configures middleware and Swagger documentation, routes/ define the endpoints, and 
 controllers/ contain the logic behind those endpoints. I also introduced a lib/ directory to 
