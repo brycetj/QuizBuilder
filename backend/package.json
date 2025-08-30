@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node server.js",
     "dev": "NODE_OPTIONS=--enable-source-maps node src/server.js",
     "test": "vitest run",
     "test:watch": "vitest",
